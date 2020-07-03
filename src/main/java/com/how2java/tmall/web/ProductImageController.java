@@ -96,7 +96,7 @@ public class ProductImageController {
 		productImageService.delete(id);
 		String folder="img/";
 		if (ProductImageService.type_single.equals(bean.getType())){
-			folder+="productSingle";
+			 folder+="productSingle";
 		}
 		else {
 			folder+="productDetail";
