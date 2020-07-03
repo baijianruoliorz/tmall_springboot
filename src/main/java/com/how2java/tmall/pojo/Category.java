@@ -22,6 +22,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name="category")
+// to ignore some useless properties
 @JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
 public class Category{
     @Id
