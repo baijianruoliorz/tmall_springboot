@@ -48,7 +48,12 @@ public class ProductImageService   {
 		}
 
 	}
-	public void setFirstProdutImages(List<Product> products) {
+//	public void setFirstProdutImages(List<Product> products) {
+//		for (Product product : products) {
+//			setFirstProdutImage(product);
+//		}
+//	}
+	public void setFirstProductImages(List<Product> products){
 		for (Product product : products) {
 			setFirstProdutImage(product);
 		}

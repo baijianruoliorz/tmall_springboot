@@ -17,10 +17,16 @@ import javax.servlet.http.HttpServletRequest;
 public class PropertyController {
 	@Autowired PropertyService propertyService;
 
-    @GetMapping("/categories/{cid}/properties")
-    public Page4Navigator<Property> list(@PathVariable("cid") int cid, @RequestParam(value = "start", defaultValue = "0") int start,@RequestParam(value = "size", defaultValue = "5") int size) throws Exception {
-    	start = start<0?0:start;
-    	Page4Navigator<Property> page =propertyService.list(cid, start, size,5); 
+//    @GetMapping("/categories/{cid}/properties")
+//    public Page4Navigator<Property> list(@PathVariable("cid") int cid, @RequestParam(value = "start", defaultValue = "0") int start,@RequestParam(value = "size", defaultValue = "5") int size) throws Exception {
+//    	start = start<0?0:start;
+//    	Page4Navigator<Property> page =propertyService.list(cid, start, size,5);
+//        return page;
+//    }
+    @GetMapping(("/categories/{cid}/properties"))
+    public Page4Navigator<Property> list(@PathVariable("cid") int cid,@RequestParam(value = "start",defaultValue = "0") int start,@RequestParam(value = "size",defaultValue = "5")int size){
+        start=start<0?0:start;
+        Page4Navigator<Property> page=propertyService.list(cid,start,size,5);
         return page;
     }
     
@@ -31,14 +37,24 @@ public class PropertyController {
     }
     
     
+//    @PostMapping("/properties")
+//    public Object add(@RequestBody Property bean) throws Exception {
+//        propertyService.add(bean);
+//        return bean;
+//    }
     @PostMapping("/properties")
-    public Object add(@RequestBody Property bean) throws Exception {
+    public Object add(@RequestBody Property bean) throws Exception{
         propertyService.add(bean);
         return bean;
     }
     
+//    @DeleteMapping("/properties/{id}")
+//    public String delete(@PathVariable("id") int id, HttpServletRequest request)  throws Exception {
+//        propertyService.delete(id);
+//        return null;
+//    }
     @DeleteMapping("/properties/{id}")
-    public String delete(@PathVariable("id") int id, HttpServletRequest request)  throws Exception {
+    public String delete(@PathVariable("id") int id,HttpServletRequest request)throws Exception{
         propertyService.delete(id);
         return null;
     }

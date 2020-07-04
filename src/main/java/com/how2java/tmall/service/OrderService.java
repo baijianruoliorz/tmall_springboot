@@ -71,8 +71,9 @@ public class OrderService {
 		float total = 0;
 		add(order);
 
-		if(false)
+		if(false) {
 			throw new RuntimeException();
+		}
 
 		for (OrderItem oi: ois) {
 			oi.setOrder(order);
@@ -87,9 +88,17 @@ public class OrderService {
 		return orderDAO.findOne(oid);
 	}
 
-	public void cacl(Order o) {
-		List<OrderItem> orderItems = o.getOrderItems();
-		float total = 0;
+//	public void cacl(Order o) {
+//		List<OrderItem> orderItems = o.getOrderItems();
+//		float total = 0;
+//		for (OrderItem orderItem : orderItems) {
+//			total+=orderItem.getProduct().getPromotePrice()*orderItem.getNumber();
+//		}
+//		o.setTotal(total);
+//	}
+	public void cacl(Order o){
+	List<OrderItem> orderItems=o.getOrderItems();
+	float total=0;
 		for (OrderItem orderItem : orderItems) {
 			total+=orderItem.getProduct().getPromotePrice()*orderItem.getNumber();
 		}

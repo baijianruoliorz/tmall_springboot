@@ -22,29 +22,45 @@ public class OrderItemService {
 	@Autowired ProductImageService productImageService;
 
 	public void fill(List<Order> orders) {
-		for (Order order : orders)
+		for (Order order : orders) {
 			fill(order);
+		}
 	}
 	@CacheEvict(allEntries=true)
 	public void update(OrderItem orderItem) {
 		orderItemDAO.save(orderItem);
 	}
 
-	public void fill(Order order) {
-		OrderItemService orderItemService = SpringContextUtil.getBean(OrderItemService.class);
-		List<OrderItem> orderItems = orderItemService.listByOrder(order);
-		float total = 0;
-		int totalNumber = 0;
-		for (OrderItem oi :orderItems) {
-			total+=oi.getNumber()*oi.getProduct().getPromotePrice();
-			totalNumber+=oi.getNumber();
-			productImageService.setFirstProdutImage(oi.getProduct());
-		}
-		order.setTotal(total);
-		order.setOrderItems(orderItems);
-		order.setTotalNumber(totalNumber);
-		order.setOrderItems(orderItems);
-	}
+//	public void fill(Order order) {
+//		OrderItemService orderItemService = SpringContextUtil.getBean(OrderItemService.class);
+//		List<OrderItem> orderItems = orderItemService.listByOrder(order);
+//		float total = 0;
+//		int totalNumber = 0;
+//		for (OrderItem oi :orderItems) {
+//			total+=oi.getNumber()*oi.getProduct().getPromotePrice();
+//			totalNumber+=oi.getNumber();
+//			productImageService.setFirstProdutImage(oi.getProduct());
+//		}
+//		order.setTotal(total);
+//		order.setOrderItems(orderItems);
+//		order.setTotalNumber(totalNumber);
+//		order.setOrderItems(orderItems);
+//	}
+	 public void fill(Order order){
+		OrderItemService orderItemService=SpringContextUtil.getBean(OrderItemService.class);
+		List<OrderItem> orderItems=orderItemService.listByOrder(order);
+		float total=0;
+		int totalNumber=0;
+		 for (OrderItem oi : orderItems) {
+			 total+=oi.getNumber()*oi.getProduct().getPromotePrice();
+			 totalNumber+=oi.getNumber();
+			 productImageService.setFirstProdutImage(oi.getProduct());
+		 }
+		 order.setTotal(total);
+		 order.setOrderItems(orderItems);
+		 order.setTotalNumber(totalNumber);
+		 order.setOrderItems(orderItems);
+	 }
 
 	@CacheEvict(allEntries=true)
 	public void add(OrderItem orderItem) {
@@ -65,9 +81,11 @@ public class OrderItemService {
 		List<OrderItem> ois =orderItemService.listByProduct(product);
 		int result =0;
 		for (OrderItem oi : ois) {
-			if(null!=oi.getOrder())
-				if(null!= oi.getOrder() && null!=oi.getOrder().getPayDate())
+			if(null!=oi.getOrder()) {
+				if(null!= oi.getOrder() && null!=oi.getOrder().getPayDate()) {
 					result+=oi.getNumber();
+				}
+			}
 		}
 		return result;
 	}

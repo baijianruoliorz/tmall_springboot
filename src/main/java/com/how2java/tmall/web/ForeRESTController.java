@@ -54,30 +54,51 @@ public class ForeRESTController {
         return cs;
     }
 
+    //    @PostMapping("/foreregister")
+//    public Object register(@RequestBody User user){
+//        String name=user.getName();
+//        String password=user.getPassword();
+//        name=HtmlUtils.htmlEscape(name);
+//        user.setName(name);
+//        boolean exist=userService.isExist(name);
+//        if(exist){
+//            String message="用户名已经使用，不能在注册";
+//            return Result.fail(message);
+//        }
+//        String salt=new SecureRandomNumberGenerator().nextBytes().toString();
+//        int times=2;
+//        String algorithmName="md5";
+//
+//        String encodedPassword=new SimpleHash(algorithmName,password,salt,times).toString();
+//        user.setSalt(salt);
+//        user.setPassword(encodedPassword);
+//        userService.add(user);
+//        return Result.success();
+//    }
     @PostMapping("/foreregister")
-    public Object register(@RequestBody User user){
-        String name=user.getName();
-        String password=user.getPassword();
-        name=HtmlUtils.htmlEscape(name);
+    public Object register(@RequestBody User user) {
+        String name = user.getName();
+        String password = user.getPassword();
+        name = HtmlUtils.htmlEscape(name);
         user.setName(name);
-        boolean exist=userService.isExist(name);
-        if(exist){
-            String message="用户名已经使用，不能在注册";
+        boolean exist = userService.isExist(name);
+        if (exist) {
+            String message = "用户民已经使用,不能再次注册";
             return Result.fail(message);
         }
-        String salt=new SecureRandomNumberGenerator().nextBytes().toString();
-        int times=2;
-        String algorithmName="md5";
-
-        String encodedPassword=new SimpleHash(algorithmName,password,salt,times).toString();
+        String salt = new SecureRandomNumberGenerator().nextBytes().toString();
+        int times = 2;
+        String algorithmName = "md5";
+        String encodedPassword = new SimpleHash(algorithmName, password, salt, times).toString();
         user.setSalt(salt);
         user.setPassword(encodedPassword);
         userService.add(user);
         return Result.success();
 
     }
+
     @GetMapping("/forelogout")
-    public String logout( ) {
+    public String logout() {
         Subject subject = SecurityUtils.getSubject();
         if (subject.isAuthenticated()) {
             subject.logout();
@@ -87,7 +108,7 @@ public class ForeRESTController {
 
     @PostMapping("/forelogin")
     public Object login(@RequestBody User userParam, HttpSession session) {
-        String name =  userParam.getName();
+        String name = userParam.getName();
         name = HtmlUtils.htmlEscape(name);
 
         Subject subject = SecurityUtils.getSubject();
@@ -99,7 +120,7 @@ public class ForeRESTController {
             session.setAttribute("user", user);
             return Result.success();
         } catch (AuthenticationException e) {
-            String message ="账号密码错误";
+            String message = "账号密码错误";
             return Result.fail(message);
         }
 
@@ -130,7 +151,7 @@ public class ForeRESTController {
     @GetMapping("forecheckLogin")
     public Object checkLogin() {
         Subject subject = SecurityUtils.getSubject();
-        if(subject.isAuthenticated()) {
+        if (subject.isAuthenticated()) {
             return Result.success();
         } else {
             return Result.fail("未登录");
@@ -170,16 +191,27 @@ public class ForeRESTController {
         return c;
     }
 
+    //    @PostMapping("foresearch")
+//    public Object search(String keyword) {
+//        if (null == keyword) {
+//            keyword = "";
+//        }
+//        List<Product> ps = productService.search(keyword, 0, 20);
+//        productImageService.setFirstProductImages(ps);
+//        productService.setSaleAndReviewNumber(ps);
+//        return ps;
+//    }
     @PostMapping("foresearch")
     public Object search(String keyword) {
-        if (null == keyword) {
-            keyword = "";
+            if (keyword == null) {
+                keyword = "";
+            }
+            List<Product> ps = productService.search(keyword, 0, 20);
+            productImageService.setFirstProductImages(ps);
+            productService.setSaleAndReviewNumber(ps);
+            return ps;
         }
-        List<Product> ps = productService.search(keyword, 0, 20);
-        productImageService.setFirstProdutImages(ps);
-        productService.setSaleAndReviewNumber(ps);
-        return ps;
-    }
+
 
     @GetMapping("forebuyone")
     public Object buyone(int pid, int num, HttpSession session) {
@@ -202,7 +234,6 @@ public class ForeRESTController {
                 break;
             }
         }
-
         if (!found) {
             OrderItem oi = new OrderItem();
             oi.setUser(user);
@@ -231,20 +262,23 @@ public class ForeRESTController {
         map.put("total", total);
         return Result.success(map);
     }
+
     @GetMapping("foreaddCart")
-    public Object addCart(int pid,int num,HttpSession session){
-        buyoneAndAddCart(pid,num,session);
-        return  Result.success();
+    public Object addCart(int pid, int num, HttpSession session) {
+        buyoneAndAddCart(pid, num, session);
+        return Result.success();
     }
+
     @GetMapping("forecart")
-    public Object cart(HttpSession session){
-        User user=(User)session.getAttribute("user");
-        List<OrderItem> ois =orderItemService.listByUser(user);
+    public Object cart(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        List<OrderItem> ois = orderItemService.listByUser(user);
         productImageService.setFirstProductImagesOnorderItems(ois);
         return ois;
     }
+
     @GetMapping("forechangeOrderItem")
-    public Object changeOrderItem (HttpSession session,int pid,int num) {
+    public Object changeOrderItem(HttpSession session, int pid, int num) {
         User user = (User) session.getAttribute("user");
         if (null == user) {
             return Result.fail("未登录");
@@ -260,31 +294,70 @@ public class ForeRESTController {
         }
         return Result.success();
     }
+//    @GetMapping("forechangeOrderItem")
+//    public Object changeOrderItem(HttpSession session,int pid,int num){
+//        Object user1 = session.getAttribute("user");
+//        User user= (User) user1;
+//        if (null==user){
+//            return Result.fail("未登录");
+//        }
+//        List<OrderItem> ois=orderItemService.listByOrder(user);
+//        for (OrderItem oi : ois) {
+//            if (oi.getProduct().getId()==pid){
+//                oi.setNumber(num);
+//                orderItemService.update(oi);
+//                break;
+//            }
+//        }
+//        return Result.success();
+//    }
+
     @GetMapping("foredeleteOrderItem")
-    public Object deleteOrderItem(HttpSession session,int oiid){
-        User user =(User)  session.getAttribute("user");
-        if(null==user) {
+    public Object deleteOrderItem(HttpSession session, int oiid) {
+        User user = (User) session.getAttribute("user");
+        if (null == user) {
             return Result.fail("未登录");
         }
         orderItemService.delete(oiid);
         return Result.success();
     }
+
+    //    @PostMapping("forecreateOrder")
+//    public Object createOrder(@RequestBody Order order, HttpSession session) {
+//        User user = (User) session.getAttribute("user");
+//        if (null == user) {
+//            return Result.fail("未登录");
+//        }
+//        String orderCode = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()) + RandomUtils.nextInt(10000);
+//        order.setOrderCode(orderCode);
+//        order.setCreateDate(new Date());
+//        order.setUser(user);
+//        order.setStatus(OrderService.waitPay);
+//        List<OrderItem> ois = (List<OrderItem>) session.getAttribute("ois");
+//        float total = orderService.add(order, ois);
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("oid", order.getId());
+//        map.put("total", total);
+//        return Result.success(map);
+//    }
     @PostMapping("forecreateOrder")
-    public Object createOrder(@RequestBody Order order,HttpSession session){
-        User user=(User)session.getAttribute("user");
-        if(null==user) {
+    public Object createOrder(@RequestBody Order order, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (null == user) {
             return Result.fail("未登录");
         }
-        String orderCode=new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date())+ RandomUtils.nextInt(10000);
+        String orderCode = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()) + RandomUtils.nextInt(10000);
         order.setOrderCode(orderCode);
         order.setCreateDate(new Date());
         order.setUser(user);
         order.setStatus(OrderService.waitPay);
-        List<OrderItem> ois=(List<OrderItem>)session.getAttribute("ois");
-        float total =orderService.add(order,ois);
-        Map<String,Object> map=new HashMap<>();
-        map.put("oid",order.getId());
-        map.put("total",total);
+        Object ois1 = session.getAttribute("ois");
+        List<OrderItem> ois = (List<OrderItem>) ois1;
+        float total = orderService.add(order, ois);
+        Map<String, Object> map = new HashMap<>();
+        map.put("oid", order.getId());
+        map.put("total", total);
         return Result.success(map);
+
     }
 }
