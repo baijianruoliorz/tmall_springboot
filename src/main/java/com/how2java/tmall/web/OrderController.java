@@ -23,13 +23,17 @@ public class OrderController {
 	@Autowired OrderItemService orderItemService;
 
     @GetMapping("/orders")
-    public Page4Navigator<Order> list(@RequestParam(value = "start", defaultValue = "0") int start,@RequestParam(value = "size", defaultValue = "5") int size) throws Exception {
-    	start = start<0?0:start;
-    	Page4Navigator<Order> page =orderService.list(start, size, 5); 
-    	orderItemService.fill(page.getContent());
+    public Page4Navigator<Order> list(@RequestParam(value = "start" ,defaultValue = "0")int start,
+                                      @RequestParam(value = "size",defaultValue = "5")int size)throws Exception{
+//    make sure it's not negative
+        start=start<0?0:start;
+        Page4Navigator<Order> page=orderService.list(start,size,5);
+        orderItemService.fill(page.getContent());
         orderService.removeOrderFromOrderItem(page.getContent());
         return page;
     }
+
+
     @PutMapping("deliveryOrder/{oid}")
     public Object deliveryOrder(@PathVariable int oid) throws IOException {
         Order o = orderService.get(oid);

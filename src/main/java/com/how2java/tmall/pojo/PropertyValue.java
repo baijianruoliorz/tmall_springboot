@@ -23,20 +23,21 @@ import lombok.Data;
 @Table(name = "propertyvalue")
 @JsonIgnoreProperties({ "handler","hibernateLazyInitializer" })
 public class PropertyValue {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name="pid")
 	private int id;
 
-
 	@ManyToOne
-	@JoinColumn(name = "pid")
-
+	@JoinColumn(name="pid")
 	private Product product;
 	@ManyToOne
-
-	@JoinColumn(name = "ptid")
+	@JoinColumn(name="ptid")
 	private Property property;
 
 	private String value;
+
+
+
 }

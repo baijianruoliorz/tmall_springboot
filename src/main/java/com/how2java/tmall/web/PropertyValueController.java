@@ -18,18 +18,19 @@ public class PropertyValueController {
     @Autowired PropertyValueService propertyValueService;
     @Autowired ProductService productService;
 
+
     @GetMapping("/products/{pid}/propertyValues")
-    public List<PropertyValue> list(@PathVariable("pid") int pid) throws Exception {
-        Product product = productService.get(pid);
+    public List<PropertyValue> list(@PathVariable("pid")int pid) throws Exception{
+        Product product=productService.get(pid);
         propertyValueService.init(product);
-        List<PropertyValue> propertyValues = propertyValueService.list(product);
+        List<PropertyValue> propertyValues=propertyValueService.list(product);
         return propertyValues;
     }
 
-    @PutMapping("/propertyValues")
-    public Object update(@RequestBody PropertyValue bean) throws Exception {
+  @PutMapping("/propertyValues")
+    public Object update(@RequestBody PropertyValue bean) throws Exception{
         propertyValueService.update(bean);
         return bean;
-    }
+  }
 
 }
